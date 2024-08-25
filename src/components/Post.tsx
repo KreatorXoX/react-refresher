@@ -1,7 +1,7 @@
 import styles from "./Post.module.css";
 type Props = {
-  name: string;
-  message: string;
+  name: string | undefined;
+  message: string | undefined;
 };
 
 export default function Post({ name, message }: Props) {

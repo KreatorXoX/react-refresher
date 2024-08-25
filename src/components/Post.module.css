@@ -6,6 +6,10 @@
   width: 80%;
   min-width: 250px;
   margin: auto;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.75s forwards;
 }
 .author {
   font-weight: 900;
@@ -33,4 +37,12 @@
   font-size: larger;
   font-weight: bold;
   background-color: transparent;
+}
+
+/* Keyframes for sliding in from below */
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

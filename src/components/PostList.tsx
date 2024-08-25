@@ -4,37 +4,41 @@ import Post from "./Post";
 import styles from "./PostList.module.css";
 import Modal from "./Modal";
 
-type Props = {};
+type PostType = { author: string; message: string } | undefined;
 
-const PostList = ({}: Props) => {
-  const [modalOpen, setModalOpen] = useState(true);
-  const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
+type Props = { onModalClose: () => void; isModalOpen: boolean };
 
-  const onMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(event.target.value);
+const PostList = ({ onModalClose, isModalOpen }: Props) => {
+  const [postList, setPostList] = useState<PostType[]>();
+
+  const addNewPostHandler = (post: PostType) => {
+    setPostList((prev) => [...(prev || []), post]);
   };
 
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
-  const onModalClose = () => {
-    setModalOpen(false);
-  };
   return (
     <>
-      {modalOpen && (
-        <Modal onClose={onModalClose} isOpen={modalOpen}>
+      {isModalOpen && (
+        <Modal onClose={onModalClose} isOpen={isModalOpen}>
           <NewPost
-            onMessageChange={onMessageChange}
-            onNameChange={onNameChange}
+            onModalClose={onModalClose}
+            onAddNewPost={addNewPostHandler}
           />
         </Modal>
       )}
 
       <ul className={styles.list}>
-        <Post name={name} message={message} />
+        {postList ? (
+          postList.map((post, idx) => (
+            <Post key={idx} name={post?.author} message={post?.message} />
+          ))
+        ) : (
+          <div>
+            <p>No posts yet!</p>
+            <p>
+              you can start adding by clicking the <span>New Post!</span>
+            </p>
+          </div>
+        )}
       </ul>
     </>
   );

@@ -13,3 +13,14 @@
   margin-bottom: 1rem;
   background-color: #a4bcb1;
 }
+
+.list p {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.list span {
+  font-style: italic;
+  text-decoration: underline;
+}

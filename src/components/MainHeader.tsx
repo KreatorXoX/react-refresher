@@ -1,10 +1,12 @@
-import styles from "./MainHeader.module.css";
-import { MdPostAdd } from "react-icons/md";
+import { Link } from "react-router-dom";
 import { IoBeerOutline } from "react-icons/io5";
+import { MdPostAdd } from "react-icons/md";
 
-type Props = { onModalOpen: () => void };
+import styles from "./MainHeader.module.css";
 
-const MainHeader = ({ onModalOpen }: Props) => {
+type Props = {};
+
+const MainHeader = ({}: Props) => {
   return (
     <header className={styles.main__header}>
       <div className={styles.container}>
@@ -13,11 +15,11 @@ const MainHeader = ({ onModalOpen }: Props) => {
         </h1>
         <nav className={styles.nav}>
           <ul className={styles.nav__list}>
-            <li onClick={onModalOpen}>
-              <p className={styles.nav__link}>
+            <li>
+              <Link to="/new-post" className={styles.nav__link}>
                 <MdPostAdd size={30} />
                 New Post
-              </p>
+              </Link>
             </li>
           </ul>
         </nav>

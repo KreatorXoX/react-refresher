@@ -1,44 +1,53 @@
-import { useState } from "react";
-import NewPost from "./NewPost";
+import { useEffect, useState } from "react";
+
 import Post from "./Post";
 import styles from "./PostList.module.css";
-import Modal from "./Modal";
 
 type PostType = { author: string; message: string } | undefined;
 
-type Props = { onModalClose: () => void; isModalOpen: boolean };
+type Props = {};
 
-const PostList = ({ onModalClose, isModalOpen }: Props) => {
+const PostList = ({}: Props) => {
   const [postList, setPostList] = useState<PostType[]>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  const addNewPostHandler = (post: PostType) => {
-    setPostList((prev) => [...(prev || []), post]);
-  };
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("http://localhost:8080/posts");
+
+      if (!response.ok) {
+        setIsError(true);
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+      setIsLoading(false);
+      setIsError(false);
+      setPostList(data.posts);
+    }
+    fetchPosts();
+  }, []);
 
   return (
     <>
-      {isModalOpen && (
-        <Modal onClose={onModalClose} isOpen={isModalOpen}>
-          <NewPost
-            onModalClose={onModalClose}
-            onAddNewPost={addNewPostHandler}
-          />
-        </Modal>
+      {isLoading && <p>Loading...</p>}
+      {!isLoading && postList?.length === 0 && (
+        <div>
+          <p>No posts yet!</p>
+          <p>
+            you can start adding by clicking the <span>New Post!</span>
+          </p>
+        </div>
       )}
-
+      {isError && <p>Something went wrong!</p>}
       <ul className={styles.list}>
-        {postList ? (
+        {!isLoading &&
+          postList &&
           postList.map((post, idx) => (
             <Post key={idx} name={post?.author} message={post?.message} />
-          ))
-        ) : (
-          <div>
-            <p>No posts yet!</p>
-            <p>
-              you can start adding by clicking the <span>New Post!</span>
-            </p>
-          </div>
-        )}
+          ))}
       </ul>
     </>
   );

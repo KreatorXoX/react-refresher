@@ -24,7 +24,7 @@
 }
 
 /* Optional: Media query to adjust modal for smaller screens */
-@media (max-width: 600px) {
+@media (max-width: 960px) {
   .modal {
     width: 100%; /* Ensure the modal takes up more space on smaller screens */
     max-width: none; /* Remove max-width on smaller screens */

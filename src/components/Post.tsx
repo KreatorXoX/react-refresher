@@ -1,18 +1,20 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./Post.module.css";
 type Props = {
-  name: string | undefined;
+  author: string | undefined;
   message: string | undefined;
+  id: string | undefined;
 };
 
-export default function Post({ name, message }: Props) {
+export default function Post({ author, message, id }: Props) {
+  const navigate = useNavigate();
+  const postDetailHandler = () => {
+    navigate(`/post/${id}`);
+  };
   return (
-    <li className={styles.post}>
-      <p className={styles.author}>{name ? name : "Anonymous"}</p>
+    <li className={styles.post} onClick={postDetailHandler}>
+      <p className={styles.author}>{author ? author : "Anonymous"}</p>
       <p className={styles.message}>{message ? message : "No Message"}</p>
-      <div className={styles.post__footer}>
-        <button>Like ❤️ </button>
-        <button>Dislike 👎🏼 </button>
-      </div>
     </li>
   );
 }

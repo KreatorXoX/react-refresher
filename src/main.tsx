@@ -1,12 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import Landing from "./routes/Landing.tsx";
-
-import NewPost from "./routes/NewPost.tsx";
 import RootLayout from "./routes/RootLayout.tsx";
+import Landing, { loader as LandingLoader } from "./routes/Landing.tsx";
+import NewPost, { action as NewPostAction } from "./routes/NewPost.tsx";
+import PostDetail, {
+  loader as PostDetailLoader,
+} from "./routes/PostDetail.tsx";
 
 import "./index.css";
 
@@ -18,7 +19,15 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Landing />,
-        children: [{ path: "/new-post", element: <NewPost /> }],
+        loader: LandingLoader,
+        children: [
+          { path: "/new-post", element: <NewPost />, action: NewPostAction },
+          {
+            path: "/post/:id",
+            element: <PostDetail />,
+            loader: PostDetailLoader,
+          },
+        ],
       },
     ],
   },

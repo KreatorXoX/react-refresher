@@ -1,52 +1,29 @@
-import { useState } from "react";
+import { useNavigate, Form, ActionFunction, redirect } from "react-router-dom";
+
+import Modal from "../components/Modal";
 
 import styles from "./NewPost.module.css";
-import Modal from "../components/Modal";
-import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const NewPost = ({}: Props) => {
   const navigate = useNavigate();
 
-  const [message, setMessage] = useState("");
-  const [name, setName] = useState("");
-
-  const onMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(event.target.value);
-  };
-
-  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
   const cancelHandler = () => {
     navigate(-1);
   };
 
-  const submitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    const createdPost = { author: name, message: message };
-    fetch("http://localhost:8080/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(createdPost),
-    });
-  };
-
   return (
     <Modal>
-      <form className={styles.form} onSubmit={submitHandler}>
+      <Form className={styles.form} method="post">
         <div className={styles.form__input}>
-          <label htmlFor="body">Your Message</label>
-          <textarea id="body" required rows={3} onChange={onMessageChange} />
+          <label htmlFor="message">Your Message</label>
+          <textarea id="message" required name="message" rows={3} />
         </div>
 
         <div className={styles.form__input}>
-          <label htmlFor="name">Your name</label>
-          <input type="text" id="name" required onChange={onNameChange} />
+          <label htmlFor="author">Your name</label>
+          <input type="text" id="author" name="author" required />
         </div>
         <div className={styles.actions}>
           <button type="button" onClick={cancelHandler}>
@@ -54,9 +31,23 @@ const NewPost = ({}: Props) => {
           </button>
           <button type="submit">Submit</button>
         </div>
-      </form>
+      </Form>
     </Modal>
   );
 };
 
 export default NewPost;
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData);
+
+  await fetch("http://localhost:8080/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  });
+  return redirect("/");
+};

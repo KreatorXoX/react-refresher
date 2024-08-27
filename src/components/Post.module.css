@@ -10,6 +10,7 @@
   opacity: 0;
   transform: translateY(20px);
   animation: slideInUp 0.75s forwards;
+  cursor: pointer;
 }
 .author {
   font-weight: 900;
@@ -25,18 +26,6 @@
   margin: 0;
   font-style: italic;
   color: #ccdbe4;
-}
-.post__footer {
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid lightgray;
-  padding: 10px 20px;
-}
-
-.post__footer button {
-  font-size: larger;
-  font-weight: bold;
-  background-color: transparent;
 }
 
 /* Keyframes for sliding in from below */

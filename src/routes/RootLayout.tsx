@@ -4,7 +4,7 @@ import MainHeader from "../components/MainHeader";
 
 type Props = {};
 
-const RootLayout = (props: Props) => {
+const RootLayout = ({}: Props) => {
   return (
     <>
       <MainHeader />

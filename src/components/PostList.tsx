@@ -1,39 +1,18 @@
-import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
 import Post from "./Post";
 import styles from "./PostList.module.css";
 
-type PostType = { author: string; message: string } | undefined;
+type PostType = { author: string; message: string; id: string } | undefined;
 
 type Props = {};
 
 const PostList = ({}: Props) => {
-  const [postList, setPostList] = useState<PostType[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    async function fetchPosts() {
-      const response = await fetch("http://localhost:8080/posts");
-
-      if (!response.ok) {
-        setIsError(true);
-        setIsLoading(false);
-        return;
-      }
-
-      const data = await response.json();
-      setIsLoading(false);
-      setIsError(false);
-      setPostList(data.posts);
-    }
-    fetchPosts();
-  }, []);
+  const postList = useLoaderData() as PostType[];
 
   return (
     <>
-      {isLoading && <p>Loading...</p>}
-      {!isLoading && postList?.length === 0 && (
+      {postList?.length === 0 && (
         <div>
           <p>No posts yet!</p>
           <p>
@@ -41,12 +20,16 @@ const PostList = ({}: Props) => {
           </p>
         </div>
       )}
-      {isError && <p>Something went wrong!</p>}
+
       <ul className={styles.list}>
-        {!isLoading &&
-          postList &&
+        {postList &&
           postList.map((post, idx) => (
-            <Post key={idx} name={post?.author} message={post?.message} />
+            <Post
+              key={idx}
+              author={post?.author}
+              message={post?.message}
+              id={post?.id}
+            />
           ))}
       </ul>
     </>
